@@ -62,6 +62,18 @@ export interface TemplateDef {
 
 /* ------------------------------- blocks ---------------------------------- */
 
+/**
+ * How many skill items go into one block.
+ *
+ * A skills group is a single unsplittable block, so a long list can be half a
+ * page tall and strand everything below it. Chunking keeps each block small
+ * enough to flow, which is what stops a page ending halfway down with blank
+ * paper beneath it. Twelve items renders as a comfortable 2-3 line group at
+ * every template's type scale, including up to 1.3x font scale.
+ */
+const SKILL_ITEMS_PER_BLOCK = 12
+
+
 export function block(id: string, kind: BlockKind, node: ReactNode): CvBlock {
   return { id, kind, node }
 }
@@ -270,7 +282,27 @@ export function standardBlocks(
       if (list.length === 0) continue
       pushHeading(key)
       for (const group of list) {
-        blocks.push(block(`skill-${group.id}`, 'badges', kit.badges(group.category, group.items)))
+        /*
+         * A skills group renders as ONE atomic block, so a long list becomes a
+         * block half a page tall. When it does not fit in the space left, the
+         * whole thing jumps to the next page and strands the remainder — the
+         * "text stops halfway down, rest of the page is blank" effect.
+         *
+         * Chunk it instead: several ordinary blocks that flow and fill like any
+         * other content. The category is shown once, on the first chunk, and
+         * consecutive chunks sit flush so the list still reads as continuous.
+         */
+        const items = group.items.filter((item) => item.trim().length > 0)
+        if (items.length === 0) {
+          blocks.push(block(`skill-${group.id}`, 'badges', kit.badges(group.category, [])))
+        } else {
+          for (let start = 0; start < items.length; start += SKILL_ITEMS_PER_BLOCK) {
+            const chunk = items.slice(start, start + SKILL_ITEMS_PER_BLOCK)
+            const isFirst = start === 0
+            const id = isFirst ? `skill-${group.id}` : `skill-${group.id}-${start}`
+            blocks.push(block(id, 'badges', kit.badges(isFirst ? group.category : '', chunk)))
+          }
+        }
         blocks.push(spacer(`skill-${group.id}`, 6))
       }
       continue

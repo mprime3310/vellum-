@@ -114,3 +114,127 @@ export const SEED = JSON.stringify({
   data: ana,
   settings: { template: 'modern', accent: '#1F4E79', fontScale: 1 },
 })
+
+/**
+ * A deliberately awkward CV for stressing pagination.
+ *
+ * The failure mode: a heading that must keep with what follows, where that
+ * next block is TALL and unsplittable (a big skills group, a long bullet).
+ * The reservation for "what follows" is then larger than the space left, so
+ * the heading AND its block both jump to the next page and the remainder of
+ * the current one is left blank. Real CVs hit this with dense skill lists and
+ * wordy bullets.
+ */
+export const stressCv = {
+  fullName: 'Ana Petrova',
+  title: 'Licensed Clinical Social Worker & Human-AI Interaction Specialist',
+  summary:
+    'Ana is a licensed clinical social worker with more than five years of direct client practice and deep experience in qualitative research and human-computer interaction. She elicits missing context from diverse populations, synthesizes social, psychological, and practical factors to shape personalized recommendations. Recent work involved designing and running AI evaluation pilots that test language model alignment with user context.',
+  experience: [
+    {
+      id: 'e1',
+      role: 'Text Situated Alignment Specialist — BA (Contract)',
+      company: 'Turing AI Labs',
+      location: 'Sofia, Bulgaria',
+      startDate: '2023-09',
+      endDate: 'Present',
+      bullets: [
+        'Worked with AI research engineers to create evaluation scenarios that add social context before user requests, raising model relevance 27%.',
+        'Owned the end-to-end evaluation programme: designed the rubric, ran the pilot across four model families, and wrote the findings that guided two rounds of fine-tuning, while also mentoring two junior colleagues through the same pipeline and keeping the workstream inside its quarterly budget.',
+        'Wrote detailed feedback that explained rating rationale, cutting ambiguity in later model fine-tuning cycles.',
+        'Led weekly debriefs with multidisciplinary teams, refining project guidelines and keeping the timeline on track.',
+      ],
+    },
+    {
+      id: 'e2',
+      role: 'Licensed Clinical Social Worker',
+      company: 'Global Health Services',
+      location: 'Sofia, Bulgaria',
+      startDate: '2020-06',
+      endDate: '2023-08',
+      bullets: [
+        'Delivered individual counseling to more than 350 clients, achieving a 94% satisfaction rating.',
+        'Elicited missing context in intake interviews, boosting treatment planning completeness 22%.',
+        'Authored case notes with structured qualitative coding, enabling cross-team analysis of psychosocial factors.',
+        'Implemented a resource-mapping tool, linking 78 clients to financial and educational support services.',
+      ],
+    },
+  ],
+  education: [
+    {
+      id: 'd1',
+      degree: 'Master of Social Work (MSW) – Licensed Clinical Social Worker (LCSW)',
+      institution: 'University of Sofia – Faculty of Social Sciences',
+      location: 'Sofia, Bulgaria',
+      startDate: '2015-09',
+      endDate: '2018-06',
+      details: 'Thesis: "Contextual Factors in Client Engagement", GPA 3.9/4.0.',
+    },
+  ],
+  // One very large group: a skills list this long renders as a single
+  // unsplittable block ~half a page tall, which is what strands a page.
+  skills: [
+    {
+      id: 's1',
+      category: 'Clinical Practice',
+      items: [
+        'Licensed Clinical Social Worker (LCSW)', 'Client intake & assessment',
+        'Context elicitation techniques', 'Crisis intervention',
+        'Resource navigation', 'Multidisciplinary case coordination',
+        'Trauma-informed care planning', 'Safeguarding and risk assessment',
+        'Motivational interviewing', 'Cognitive behavioural techniques',
+        'Relapse prevention planning', 'Group facilitation',
+        'Discharge planning', 'Family systems work',
+        'Documentation to regulatory standard', 'Inter-agency referrals',
+        'Adoption and foster care practice', 'Domestic abuse response',
+        'Child protection casework', 'Mental health triage',
+        'Substance misuse counselling', 'Dementia care planning',
+        'Palliative care support', 'HIV counselling',
+        'LGBTQ+ affirming practice', 'Disability assessment',
+        'Care coordination', 'Clinical supervision',
+        'Reflective practice', 'Evidence-based interventions',
+        'Service design for clinics', 'Quality improvement',
+        'Patient advocacy', 'Health literacy coaching',
+        'Wound care basics', 'Pain management',
+        'Sleep hygiene coaching', 'Stress management',
+        'Grief and loss support', 'Anger management',
+        'Conflict resolution', 'Medication adherence support',
+        'Sexual health advice', 'Contraception counselling',
+        'Reproductive health support', 'Menopause support',
+        'Weight management coaching', 'Smoking cessation',
+      ],
+    },
+    {
+      id: 's2',
+      category: 'Research, Data and Technology',
+      items: [
+        'Interview protocol design', 'Thematic analysis',
+        'NVivo & ATLAS.ti coding', 'Case review synthesis',
+        'Structured feedback generation', 'Mixed-methods reporting',
+      ],
+    },
+  ],
+  projects: [
+    {
+      id: 'p1',
+      title: 'AI Contextual Alignment Pilot',
+      subtitle: 'Turing AI Labs',
+      date: '2023-09 to Present',
+      description: 'Designed and ran a short-term pilot to test if providing social context before user requests improves language model recommendations.',
+    },
+  ],
+  certifications: [],
+  awards: [],
+  languages: [
+    { id: 'l1', name: 'English', level: 'Fluent' },
+    { id: 'l2', name: 'Bulgarian', level: 'Native' },
+  ],
+  volunteer: [],
+  references: [{ id: 'r1', title: 'Dr. Elena Markov', subtitle: 'Director', description: 'Available upon request.' }],
+}
+
+export const STRESS_SEED = JSON.stringify({
+  data: stressCv,
+  settings: { template: 'minimal', accent: '#1F4E79', fontScale: 1 },
+})
+

@@ -62,6 +62,13 @@ export interface PaginateOptions {
 
 const DEFAULT_LINE_HEIGHT = 18
 const DEFAULT_EPSILON = 0.5
+/**
+ * The most of an atomic next block a heading will insist on keeping with it,
+ * as a fraction of the page. Beyond this, insisting is pointless: a block that
+ * big almost never fits in the remaining space, so demanding it only pushes the
+ * heading to the next page and leaves a hole behind.
+ */
+const MAX_KEEP_WITH_FRACTION = 0.34
 
 export function paginate(blocks: CvBlock[], options: PaginateOptions): PagePlan[] {
   const { contentHeight, heights, lineHeights, measureText } = options
@@ -120,6 +127,11 @@ export function paginate(blocks: CvBlock[], options: PaginateOptions): PagePlan[
    * is far taller than a page's worth of leftover space, so every heading in
    * front of it would be exiled to a page of its own, stranding the header
    * alone on page 1.
+   *
+   * The same reasoning applies to an oversized ATOMIC block (a long skills
+   * group, a wordy bullet). Demanding all of it fit means it rarely can, so
+   * the heading is pushed down every time and leaves a big hole. Cap what we
+   * insist on so the heading can still sit above a partial block.
    */
   const keepWithHeight = (next: CvBlock | null): number => {
     if (!next) return 0
@@ -128,7 +140,7 @@ export function paginate(blocks: CvBlock[], options: PaginateOptions): PagePlan[
       const lineHeight = lineHeights[next.id] ?? DEFAULT_LINE_HEIGHT
       return Math.min(height, lineHeight * minLines)
     }
-    return height
+    return Math.min(height, contentHeight * MAX_KEEP_WITH_FRACTION)
   }
 
   for (let i = 0; i < blocks.length; i++) {

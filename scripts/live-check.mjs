@@ -23,11 +23,20 @@ import {
 } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { SEED } from './fixtures/ana.mjs'
+import { SEED, STRESS_SEED } from './fixtures/ana.mjs'
 
-const URL_UNDER_TEST = process.argv[2] ?? 'http://localhost:3000/'
+const STRESS = process.argv.includes('--stress')
+const TEMPLATE = process.argv.find((a) => a.startsWith('--template='))?.split('=')[1]
+const URL_UNDER_TEST =
+  process.argv.slice(2).find((a) => a.startsWith('http')) ?? 'http://localhost:3000/'
 const PORT = 9222
-const OUT_DIR = join(process.cwd(), 'scripts', '.out', 'live')
+const OUT_DIR = join(
+  process.cwd(),
+  'scripts',
+  '.out',
+  'live',
+  TEMPLATE ? `tpl-${TEMPLATE}` : '',
+)
 
 /* ------------------------------ CDP plumbing ------------------------------ */
 const CHROME =
@@ -134,7 +143,13 @@ await send('Page.navigate', { url: URL_UNDER_TEST })
 await waitForLoad()
 await sleep(1500)
 
-await evaluate(`localStorage.setItem('lovable-cv-data-v2', ${JSON.stringify(SEED)})`)
+// Pick the fixture, and let --template= / --stress override what is in it.
+const baseSeed = JSON.parse(STRESS ? STRESS_SEED : SEED)
+const seedPayload = JSON.stringify({
+  ...baseSeed,
+  settings: { ...baseSeed.settings, ...(TEMPLATE ? { template: TEMPLATE } : {}) },
+})
+await evaluate(`localStorage.setItem('lovable-cv-data-v2', ${JSON.stringify(seedPayload)})`)
 await send('Page.reload', {})
 await waitForLoad()
 

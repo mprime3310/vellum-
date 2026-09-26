@@ -16,7 +16,9 @@
     "verify": "rolldown scripts/verify.ts -d scripts/.out --format esm --platform node && node scripts/.out/verify.js",
     "probe": "node scripts/run-layout-probe.mjs",
     "probe:stress": "node scripts/run-layout-probe.mjs --stress",
-    "live": "node scripts/live-check.mjs"
+    "live": "node scripts/live-check.mjs",
+    "sweep": "node scripts/sweep-templates.mjs",
+    "sweep:stress": "node scripts/sweep-templates.mjs --stress"
   },
   "dependencies": {
     "@ai-sdk/openai-compatible": "^3.0.55",

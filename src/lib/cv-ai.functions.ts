@@ -9,14 +9,23 @@ import {
   buildHumanizePrompt,
   buildParsePrompt,
 } from './cv-prompts'
-import { getProvider, modelFor, isProviderId, getAiSettings } from './ai-settings'
+import { getProvider, modelFor, isProviderId, getAiSettings, PROVIDERS } from './ai-settings'
 
 /**
  * Every AI call happens here, on the server. The browser only ever receives
  * validated `CvData` back.
  */
 
-const ProviderSchema = z.enum(['lovable', 'groq', 'gemini', 'openai', 'deepseek'])
+/**
+ * Derived from the PROVIDERS registry rather than re-typed by hand, so adding a
+ * provider cannot leave the server-side validator rejecting it.
+ */
+const ProviderSchema = z.enum(
+  PROVIDERS.map((provider) => provider.id) as [
+    (typeof PROVIDERS)[number]['id'],
+    ...(typeof PROVIDERS)[number]['id'][],
+  ],
+)
 
 const AiArgsSchema = z.object({
   provider: ProviderSchema.optional(),

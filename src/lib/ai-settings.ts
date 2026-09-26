@@ -10,7 +10,7 @@
 
 export const AI_SETTINGS_KEY = 'lovable-cv-ai-v2'
 
-export type ProviderId = 'lovable' | 'groq' | 'gemini' | 'openai' | 'deepseek'
+export type ProviderId = 'lovable' | 'groq' | 'gemini' | 'openai' | 'deepseek' | 'cohere' | 'nvidia'
 
 export interface ProviderDef {
   id: ProviderId
@@ -100,6 +100,41 @@ export const PROVIDERS: ProviderDef[] = [
       { id: 'deepseek-reasoner', label: 'DeepSeek Reasoner' },
     ],
     defaultModel: 'deepseek-chat',
+    maxTokensParam: 'max_tokens',
+  },
+  {
+    id: 'cohere',
+    label: 'Cohere',
+    // OpenAI-compatibility layer. Cohere serves the same route from
+    // api.cohere.ai; api.cohere.com is the canonical domain.
+    endpoint: 'https://api.cohere.com/compatibility/v1/chat/completions',
+    docsUrl: 'https://dashboard.cohere.com/api-keys',
+    // Cohere keys are opaque tokens with no fixed prefix, so we do not claim one.
+    keyHint: 'Free trial key at dashboard.cohere.com/api-keys',
+    models: [
+      { id: 'command-a-plus-05-2026', label: 'Command A Plus · recommended' },
+      { id: 'command-a-03-2025', label: 'Command A 03-2025' },
+      { id: 'command-r7b-12-2024', label: 'Command R7B · fast' },
+      { id: 'command-r-plus-04-2024', label: 'Command R Plus 04-2024' },
+    ],
+    defaultModel: 'command-a-plus-05-2026',
+    maxTokensParam: 'max_tokens',
+  },
+  {
+    id: 'nvidia',
+    label: 'NVIDIA NIM',
+    // NVIDIA's hosted NIM catalogue, OpenAI-compatible, free to use today.
+    endpoint: 'https://integrate.api.nvidia.com/v1/chat/completions',
+    docsUrl: 'https://build.nvidia.com',
+    keyPrefix: 'nvapi-',
+    keyHint: 'Starts with nvapi- — free keys at build.nvidia.com',
+    models: [
+      { id: 'nvidia/llama-3.3-nemotron-super-49b-v1.5', label: 'Nemotron Super 49B · recommended' },
+      { id: 'nvidia/nemotron-3-super-120b-a12b', label: 'Nemotron 3 Super 120B' },
+      { id: 'meta/llama-3.3-70b-instruct', label: 'Llama 3.3 70B' },
+      { id: 'openai/gpt-oss-120b', label: 'GPT-OSS 120B' },
+    ],
+    defaultModel: 'nvidia/llama-3.3-nemotron-super-49b-v1.5',
     maxTokensParam: 'max_tokens',
   },
 ]

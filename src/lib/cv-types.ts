@@ -73,10 +73,14 @@ export interface CvData {
 export const TEMPLATE_IDS = [
   'modern',
   'ats',
+  'ats-numbered',
+  'ats-classic',
   'executive',
   'minimal',
   'harvard',
   'creative',
+  'timeline',
+  'editorial',
 ] as const
 
 export type TemplateId = (typeof TEMPLATE_IDS)[number]
