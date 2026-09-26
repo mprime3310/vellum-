@@ -1,0 +1,15 @@
+node_modules
+dist
+.output
+.scripts
+scripts/.out
+.vinxi
+.wrangler
+.env
+.env.local
+.env.*.local
+src/routeTree.gen.ts
+*.log
+.DS_Store
+.vite
+.vercel
